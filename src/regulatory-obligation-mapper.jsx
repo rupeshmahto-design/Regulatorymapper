@@ -1938,10 +1938,10 @@ CRITICAL INSTRUCTIONS:
                 setApiKey(e.target.value);
                 localStorage.setItem('anthropic_api_key', e.target.value);
               }}
-              placeholder="sk-ant-api03-..."
+              placeholder="Enter your API key..."
               style={{width:"100%",padding:"12px",borderRadius:"8px",border:"2px solid #e2e8f0",fontSize:"13px",fontFamily:"monospace",boxSizing:"border-box"}}
             />
-            <div style={{fontSize:"11px",color:"#64748b",marginTop:"6px"}}>Saved in browser session. Get your Claude API key from <a href="https://console.anthropic.com/" target="_blank" style={{color:"#3b82f6"}}>console.anthropic.com</a></div>
+            <div style={{fontSize:"11px",color:"#64748b",marginTop:"6px"}}>Securely stored in your browser session only</div>
           </div>
           {apiKey && (
             <div style={{padding:"12px 16px",background:"#f0fdf4",borderRadius:"8px",border:"1px solid #86efac"}}>
