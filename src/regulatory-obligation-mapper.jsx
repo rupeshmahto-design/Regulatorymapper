@@ -961,7 +961,7 @@ export default function RegulatoryObligationMapper() {
 
   const searchRegulatoryHistory = async () => {
     if (!apiKey) {
-      setError("API key required. Click the button in the bottom-right corner to configure your Anthropic API key.");
+      setError("API key required. Click the button in the bottom-right corner to configure your AI API key.");
       return;
     }
     
@@ -1012,7 +1012,7 @@ Do not include introduction, explanation, or markdown formatting.`;
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         if (response.status === 401) {
-          throw new Error("Invalid API key. Please check your Anthropic API key and try again.");
+          throw new Error("Invalid API key. Please check your AI API key and try again.");
         }
         throw new Error(`API request failed (${response.status}): ${errorData.error?.message || response.statusText}`);
       }
@@ -1022,7 +1022,7 @@ Do not include introduction, explanation, or markdown formatting.`;
       if (data.error) {
         const errorMsg = data.error.message || JSON.stringify(data.error);
         if (errorMsg.includes("authentication") || errorMsg.includes("api_key") || errorMsg.includes("unauthorized")) {
-          throw new Error("Invalid API key. Please check your Anthropic API key and try again.");
+          throw new Error("Invalid API key. Please check your AI API key and try again.");
         }
         throw new Error("Search failed: " + errorMsg);
       }
@@ -1067,7 +1067,7 @@ Do not include introduction, explanation, or markdown formatting.`;
 
   const processDocument = async () => {
     if (!apiKey) {
-      setError("API key required. Click the button in the bottom-right corner to configure your Anthropic API key.");
+      setError("API key required. Click the button in the bottom-right corner to configure your AI API key.");
       return;
     }
     
@@ -1132,7 +1132,7 @@ CRITICAL INSTRUCTIONS:
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         if (response.status === 401) {
-          throw new Error("Invalid API key. Please check your Anthropic API key in Step 1 and try again.");
+          throw new Error("Invalid API key. Please check your AI API key in Step 1 and try again.");
         }
         throw new Error(`API request failed (${response.status}): ${errorData.error?.message || response.statusText}`);
       }
@@ -1149,7 +1149,7 @@ CRITICAL INSTRUCTIONS:
       if (data.error) {
         const errorMsg = data.error.message || JSON.stringify(data.error);
         if (errorMsg.includes("authentication") || errorMsg.includes("api_key") || errorMsg.includes("unauthorized")) {
-          throw new Error("Invalid API key. Please check your Anthropic API key in Step 1 and try again.");
+          throw new Error("Invalid API key. Please check your AI API key in Step 1 and try again.");
         }
         throw new Error("API error: " + errorMsg);
       }
@@ -1303,7 +1303,7 @@ CRITICAL INSTRUCTIONS:
           {!apiKey && (
             <div style={{marginBottom:"20px",padding:"14px 20px",background:"#fef2f2",borderRadius:"10px",border:"1px solid #fecaca"}}>
               <div style={{display:"flex",alignItems:"center",gap:"8px",color:"#991b1b",fontSize:"13px",fontWeight:600,marginBottom:"4px"}}><AlertCircle size={16}/>API Key Required</div>
-              <div style={{fontSize:"12px",color:"#991b1b"}}>Click the button in the bottom-right corner to configure your Anthropic API key.</div>
+              <div style={{fontSize:"12px",color:"#991b1b"}}>Click the button in the bottom-right corner to configure your AI API key.</div>
             </div>
           )}
           
@@ -1930,7 +1930,7 @@ CRITICAL INSTRUCTIONS:
             <button onClick={()=>setShowApiSettings(false)} style={{background:"none",border:"none",cursor:"pointer",padding:"4px"}}><X size={20} color="#64748b"/></button>
           </div>
           <div style={{marginBottom:"24px"}}>
-            <label style={{display:"block",fontSize:"13px",fontWeight:700,color:"#0f172a",marginBottom:"8px"}}>Anthropic API Key</label>
+            <label style={{display:"block",fontSize:"13px",fontWeight:700,color:"#0f172a",marginBottom:"8px"}}>AI API Key</label>
             <input
               type="password"
               value={apiKey}
@@ -1941,7 +1941,7 @@ CRITICAL INSTRUCTIONS:
               placeholder="sk-ant-api03-..."
               style={{width:"100%",padding:"12px",borderRadius:"8px",border:"2px solid #e2e8f0",fontSize:"13px",fontFamily:"monospace",boxSizing:"border-box"}}
             />
-            <div style={{fontSize:"11px",color:"#64748b",marginTop:"6px"}}>Saved in browser session. Get your key from <a href="https://console.anthropic.com/" target="_blank" style={{color:"#3b82f6"}}>console.anthropic.com</a></div>
+            <div style={{fontSize:"11px",color:"#64748b",marginTop:"6px"}}>Saved in browser session. Get your Claude API key from <a href="https://console.anthropic.com/" target="_blank" style={{color:"#3b82f6"}}>console.anthropic.com</a></div>
           </div>
           {apiKey && (
             <div style={{padding:"12px 16px",background:"#f0fdf4",borderRadius:"8px",border:"1px solid #86efac"}}>
