@@ -1100,7 +1100,7 @@ For each obligation extract these fields:
 - sub_process: specific sub-process
 - compliance_frequency: one of "Ongoing", "Annual", "Quarterly", "Monthly", "Event-Driven"
 - priority: one of "Critical", "High", "Medium", "Low"
-- context_source: if this obligation is particularly relevant to the enforcement history or additional context provided, indicate which specific issue/relevance area it addresses (max 60 chars). If not specifically related to provided context, leave empty string ""
+- context_source: ALWAYS populate this field with the section/chapter/topic heading from the regulation where this obligation is found (max 60 chars). Examples: "Section 3: Operational Resilience", "Chapter 5: Data Management", "Part II: Risk Controls". This provides document structure context for traceability.${regulatoryHistoryContext ? " Additionally note if related to enforcement history provided." : ""}
 
 CRITICAL INSTRUCTIONS:
 - Your response must be ONLY a JSON array. No introduction, no explanation, no markdown.
@@ -1108,7 +1108,8 @@ CRITICAL INSTRUCTIONS:
 - Do not wrap in code fences or backticks
 - Be thorough — extract every single obligation from the document
 - Provide detailed, actionable control descriptions that specify WHO does WHAT, WHEN, and WHAT EVIDENCE is created
-- IMPORTANT: Include paragraph_number and page_number for full traceability to the source document`;
+- IMPORTANT: Include paragraph_number and page_number for full traceability to the source document
+- IMPORTANT: ALWAYS populate context_source with the section/chapter heading - never leave it empty`;
 
       let response;
       try {
@@ -1275,7 +1276,7 @@ CRITICAL INSTRUCTIONS:
     coverData.push([""], ["SUMMARY BY PRIORITY"], ...Object.entries(stats?.byPriority||{}).map(([k,v])=>[k,v]), [""], ["SUMMARY BY RISK CATEGORY"], ...Object.entries(stats?.byCategory||{}).map(([k,v])=>[k,v]));
     
     const cs = XLSX.utils.aoa_to_sheet(coverData); cs["!cols"]=[{wch:25},{wch:70}]; XLSX.utils.book_append_sheet(wb,cs,"Cover");
-    const h=["#","Clause Ref","Paragraph Number","Page Number","Obligation","Type","Key Requirement","Risk Category","Product Applicability","Control Title","Control Action","Control Frequency","Control Responsibility","Control Evidence","Process Area","Sub-Process","Compliance Frequency","Priority","Context Source"];
+    const h=["#","Clause Ref","Paragraph Number","Page Number","Obligation","Type","Key Requirement","Risk Category","Product Applicability","Control Title","Control Action","Control Frequency","Control Responsibility","Control Evidence","Process Area","Sub-Process","Compliance Frequency","Priority","Document Section/Topic"];
     const rows=obligations.map((o,i)=>[i+1,o.clause_ref,o.paragraph_number||"",o.page_number||"",o.obligation_text,o.obligation_type,o.key_requirement,o.risk_category,o.product_applicability||"",o.suggested_control,o.control_action||"",o.control_frequency||"",o.control_responsibility||"",o.control_evidence||"",o.process_area,o.sub_process,o.compliance_frequency,o.priority,o.context_source||""]);
     const os=XLSX.utils.aoa_to_sheet([h,...rows]); os["!cols"]=[{wch:5},{wch:14},{wch:16},{wch:10},{wch:55},{wch:14},{wch:35},{wch:18},{wch:30},{wch:25},{wch:45},{wch:18},{wch:25},{wch:35},{wch:22},{wch:22},{wch:18},{wch:10},{wch:25}]; os["!autofilter"]={ref:`A1:S${rows.length+1}`}; XLSX.utils.book_append_sheet(wb,os,"Obligations");
     const pm={}; obligations.forEach(o=>{const k=`${o.process_area}|||${o.sub_process}`;if(!pm[k])pm[k]={area:o.process_area,sub:o.sub_process,total:0,Critical:0,High:0,Medium:0,Low:0};pm[k].total++;pm[k][o.priority]=(pm[k][o.priority]||0)+1;});
@@ -1832,7 +1833,7 @@ CRITICAL INSTRUCTIONS:
           <div style={{overflowX:"auto",borderRadius:"12px",border:"1px solid #e2e8f0"}}>
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:"13px"}}>
               <thead><tr style={{background:"#f8fafc"}}>
-                {[{k:"clause_ref",l:"Clause",w:"80px"},{k:"paragraph_number",l:"Para #",w:"90px"},{k:"page_number",l:"Page",w:"60px"},{k:"obligation_text",l:"Obligation",w:"280px"},{k:"obligation_type",l:"Type",w:"100px"},{k:"risk_category",l:"Category",w:"130px"},{k:"product_applicability",l:"Products",w:"120px"},{k:"control_action",l:"Control Action",w:"220px"},{k:"control_responsibility",l:"Owner",w:"120px"},{k:"control_frequency",l:"Freq",w:"90px"},{k:"priority",l:"Priority",w:"90px"},{k:"context_source",l:"Context",w:"140px"}].map(col=>(
+                {[{k:"clause_ref",l:"Clause",w:"80px"},{k:"paragraph_number",l:"Para #",w:"90px"},{k:"page_number",l:"Page",w:"60px"},{k:"obligation_text",l:"Obligation",w:"280px"},{k:"obligation_type",l:"Type",w:"100px"},{k:"risk_category",l:"Category",w:"130px"},{k:"product_applicability",l:"Products",w:"120px"},{k:"control_action",l:"Control Action",w:"220px"},{k:"control_responsibility",l:"Owner",w:"120px"},{k:"control_frequency",l:"Freq",w:"90px"},{k:"priority",l:"Priority",w:"90px"},{k:"context_source",l:"Doc Section",w:"140px"}].map(col=>(
                   <th key={col.k} onClick={()=>handleSort(col.k)} style={{padding:"12px 10px",textAlign:"left",fontWeight:700,color:"#475569",textTransform:"uppercase",letterSpacing:"0.5px",fontSize:"11px",cursor:"pointer",minWidth:col.w,borderBottom:"2px solid #e2e8f0",userSelect:"none",whiteSpace:"nowrap"}}>
                     <span style={{display:"flex",alignItems:"center",gap:"4px"}}>{col.l}<ArrowUpDown size={12} color={sortField===col.k?"#0891b2":"#cbd5e1"}/></span>
                   </th>
@@ -1865,7 +1866,7 @@ CRITICAL INSTRUCTIONS:
                     <td style={{padding:"12px 10px"}}><Badge label={o.priority} colors={PRIORITY_COLORS[o.priority]||{bg:"#f1f5f9",text:"#475569",border:"#e2e8f0"}}/></td>
                     <td style={{padding:"12px 10px",fontSize:"12px"}}>
                       {o.context_source ? (
-                        <div style={{background:"#fef3c7",color:"#92400e",padding:"4px 8px",borderRadius:"6px",fontSize:"11px",fontWeight:600}}>{o.context_source}</div>
+                        <div style={{background:"#eff6ff",color:"#1e40af",padding:"4px 8px",borderRadius:"6px",fontSize:"11px",fontWeight:500,lineHeight:1.4}}>{o.context_source}</div>
                       ) : (
                         <span style={{color:"#cbd5e1"}}>—</span>
                       )}
